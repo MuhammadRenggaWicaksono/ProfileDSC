@@ -47,7 +47,7 @@ npm install
 
 ### 3. Konfigurasi Environment Variables (SANGAT PENTING)
 
-Buat file baru bernama `.env.local` di folder paling luar (*root directory*) proyek. Jangan menamai file ini selain `.env.local` agar tidak tidak sengaja ter-upload ke GitHub.
+Buat file baru bernama `.env` di folder paling luar (*root directory*) proyek. Jangan menamai file ini selain `.env` agar tidak tidak sengaja ter-upload ke GitHub.
 
 *Copy* format di bawah ini dan isi nilainya sesuai dengan kredensial Supabase dari *dashboard* proyek Anda:
 
@@ -66,7 +66,7 @@ API_SECRET_KEY=super-rahasia-dsc-123!
 
 ### 4. Jalankan Development Server
 
-Setelah *dependencies* dan file `.env.local` siap, jalankan aplikasi:
+Setelah *dependencies* dan file `.env` siap, jalankan aplikasi:
 
 ```bash
 npm run dev
@@ -95,6 +95,6 @@ Setiap kali Anda melakukan *request* ke API untuk mengubah data (seperti `POST`,
 **Format Header yang dibutuhkan:**
 
 * **Key:** `Authorization`
-* **Value:** `Bearer [API_SECRET_KEY]` *(Ganti dengan nilai yang ada di `.env.local` Anda)*
+* **Value:** `Bearer [API_SECRET_KEY]` *(Ganti dengan nilai yang ada di `.env` Anda)*
 
 Jika *header* ini tidak disertakan, server akan otomatis merespons dengan status `401 Unauthorized`. Request `GET` (mengambil data) tidak memerlukan *header* ini.
