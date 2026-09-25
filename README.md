@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DSC Profile Website - Backend & Frontend Monorepo
 
-## Getting Started
+Ini adalah repositori untuk website profil Developer Student Club (DSC). Proyek ini dibangun menggunakan **Next.js (App Router)** sebagai *framework full-stack* dan **Supabase** (PostgreSQL) sebagai sistem manajemen *database*.
 
-First, run the development server:
+## 🛠️ Teknologi yang Digunakan
+
+* **Framework:** Next.js 14+ (App Router)
+* **Bahasa:** TypeScript
+* **Database & Auth:** Supabase
+* **Styling:** Tailwind CSS (Opsional/Sesuai konfigurasi)
+* **API Testing:** Thunder Client / Postman
+
+---
+
+## ⚙️ Persyaratan Sistem
+
+Sebelum memulai, pastikan komputer Anda sudah terinstal:
+
+* [Node.js](https://www.google.com/search?q=https://nodejs.org/&utm_source=gemini) (Versi 18 atau lebih baru)
+* [Git](https://www.google.com/search?q=https://git-scm.com/&utm_source=gemini)
+* Akun [Supabase](https://www.google.com/search?q=https://supabase.com/&utm_source=gemini) (Untuk *setup database* lokal/proyek)
+
+---
+
+## 🚀 Cara Instalasi & Menjalankan Proyek Secara Lokal
+
+Karena alasan keamanan, folder `node_modules` dan file konfigurasi rahasia (`.env`) **tidak ikut diunggah** ke GitHub. Ikuti langkah-langkah berikut untuk menjalankan proyek di komputer Anda:
+
+### 1. Clone Repositori
+
+Buka terminal dan jalankan perintah berikut untuk mengunduh kode sumber:
+
+```bash
+git clone https://github.com/username-anda/nama-repo-anda.git
+cd nama-repo-anda
+
+```
+
+### 2. Install Dependencies
+
+Unduh semua *library* pendukung yang dibutuhkan proyek ini:
+
+```bash
+npm install
+
+```
+
+### 3. Konfigurasi Environment Variables (SANGAT PENTING)
+
+Buat file baru bernama `.env.local` di folder paling luar (*root directory*) proyek. Jangan menamai file ini selain `.env.local` agar tidak tidak sengaja ter-upload ke GitHub.
+
+*Copy* format di bawah ini dan isi nilainya sesuai dengan kredensial Supabase dari *dashboard* proyek Anda:
+
+```env
+# URL dan Kunci Publik Supabase (Untuk Read-Only/Frontend)
+NEXT_PUBLIC_SUPABASE_URL=https://[PROJECT_ID].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=masukkan-anon-key-disini
+
+# Kunci Rahasia Admin Supabase (Hanya untuk Server/Backend)
+SUPABASE_SERVICE_ROLE_KEY=masukkan-service-role-key-disini
+
+# Kunci Kustom untuk Mengamankan API POST/PUT/DELETE
+API_SECRET_KEY=super-rahasia-dsc-123!
+
+```
+
+### 4. Jalankan Development Server
+
+Setelah *dependencies* dan file `.env.local` siap, jalankan aplikasi:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka `http://localhost:3000` di *browser* Anda untuk melihat hasilnya.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📂 Struktur Direktori Utama
 
-## Learn More
+* `src/app/` : Berisi halaman antarmuka (Frontend).
+* `src/app/api/` : Berisi semua *endpoint* API (Backend). Memiliki struktur *routing* untuk `members`, `news`, `events`, `attendance`, `leaderboard`, dan `feedback`.
+* `src/lib/` : Berisi inisialisasi koneksi pihak ketiga (contoh: *client* Supabase).
+* `src/server/` : Berisi logika manipulasi database spesifik (*query* ke Supabase) agar file *routing* API tetap bersih.
+* `src/middleware.ts` : "Satpam" keamanan API yang memastikan operasi non-GET harus menyertakan token otorisasi.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔒 Catatan Keamanan API untuk Tim Backend/Frontend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Proyek ini menggunakan perlindungan **Middleware**.
+Setiap kali Anda melakukan *request* ke API untuk mengubah data (seperti `POST`, `PUT`, atau `DELETE`), Anda **wajib** menyertakan *header* otorisasi.
 
-## Deploy on Vercel
+**Format Header yang dibutuhkan:**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* **Key:** `Authorization`
+* **Value:** `Bearer [API_SECRET_KEY]` *(Ganti dengan nilai yang ada di `.env.local` Anda)*
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Jika *header* ini tidak disertakan, server akan otomatis merespons dengan status `401 Unauthorized`. Request `GET` (mengambil data) tidak memerlukan *header* ini.
