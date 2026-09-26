@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
-import { response, serverErrorResponse } from '../../utils/response'
+import { response, errorResponse } from '../../utils/response'
 
 export async function GET() {
   const { data, error } = await supabaseAdmin
@@ -8,7 +8,7 @@ export async function GET() {
     .select("*")
 
   if (error) {
-    return serverErrorResponse(500, false, error.message)
+    return errorResponse(500, false, error.message)
   }
 
   return response(200, true, "donebang", data)
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     .single();
 
   if (error) {
-    return serverErrorResponse(500, false, error.message)
+    return errorResponse(500, false, error.message)
   }
 
   return response(201, true, "Berhasil menambahkan data anggota", data)

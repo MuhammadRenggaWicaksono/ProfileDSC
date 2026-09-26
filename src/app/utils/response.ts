@@ -6,7 +6,7 @@ export async function response(statusCode:number, status:boolean, message:string
     }, {status: statusCode})
 }
 
-export async function serverErrorResponse(statusCode:number, status:boolean, message:string) {
+export async function errorResponse(statusCode:number, status:boolean, message:string) {
     return Response.json({
         status,
         message,
