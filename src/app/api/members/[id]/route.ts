@@ -1,5 +1,5 @@
 import { supabase, supabaseAdmin } from '@/lib/supabase';
-import { response, errorResponse } from '../../../utils/response'
+import { response, errorResponse } from '@/utils/response';
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

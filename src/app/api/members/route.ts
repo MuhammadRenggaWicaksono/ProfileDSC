@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
-import { response, errorResponse } from '../../utils/response'
+import { response, errorResponse } from '@/utils/response';
 
 export async function GET() {
   const { data, error } = await supabaseAdmin
