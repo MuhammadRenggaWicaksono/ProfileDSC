@@ -1,19 +1,37 @@
 import { NextResponse } from 'next/server';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
+import { response, serverErrorResponse } from '../../utils/response'
 
-// GET: Publik (Otomatis lolos dari Middleware)
 export async function GET() {
-  const { data, error } = await supabase.from('members').select('*');
-  
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  const { data, error } = await supabaseAdmin
+    .from("members")
+    .select("*")
+
+  if (error) {
+    return serverErrorResponse(500, false, error.message)
+  }
+
+  return response(200, true, "donebang", data)
 }
 
-// POST: Aman (Sudah dicegat Middleware di pintu depan)
-export async function POST(request: Request) {
-  const body = await request.json();
-  const { data, error } = await supabaseAdmin.from('members').insert([body]).select();
+export async function POST(req: Request) {
+  const body = await req.json();
+  const { data, error } = await supabaseAdmin
+    .from('members')
+    .insert({
+      name: body.name,
+      role: body.role,
+      photo_url: body.photo_url,
+      social_links: body.social_links,
+      point: body.point
+    })
+    .select()
+    .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-  return NextResponse.json(data, { status: 201 });
+  if (error) {
+    return serverErrorResponse(500, false, error.message)
+  }
+
+  return response(201, true, "Berhasil menambahkan data anggota", data)
 }
+
